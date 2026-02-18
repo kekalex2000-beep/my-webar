@@ -60,5 +60,10 @@
     <div style="position: fixed; bottom: 20px; left: 20px; background: white; padding: 10px; border-radius: 5px; z-index: 10000;">
         Наведи камеру
     </div>
+<script>
+document.querySelector('a-scene').addEventListener('loaded', function () {
+    document.querySelector('.arjs-loader').style.display = 'none';
+});
+</script>
 </body>
 </html>
