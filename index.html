@@ -3,48 +3,22 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Земля на маркере HIRO</title>
-    <!-- Подключаем библиотеки -->
+    <title>Мой первый WebAR</title>
     <script src="https://cdn.jsdelivr.net/npm/aframe"></script>
     <script src="https://cdn.jsdelivr.net/npm/@ar-js-org/ar.js"></script>
   </head>
   <body>
     <a-scene embedded arjs>
-      
-      <!-- Маркер HIRO (работает 100%) -->
       <a-marker preset="hiro">
-        
-        <!-- ВАША МОДЕЛЬ ЗЕМЛИ -->
-        <a-entity
-          gltf-model="https://github.com/kekalex2000-beep/my-webar/raw/refs/heads/main/models/Earth.glb"
-          scale="0.3 0.3 0.3"
-          position="0 0.5 0"
-          animation="property: rotation; to: 0 360 0; loop: true; dur: 10000"
-        ></a-entity>
-        
-        <!-- Добавим немного текста для красоты (можно удалить) -->
-        <a-text 
-          value="Земля" 
-          position="0 1.2 0" 
-          scale="2 2 2" 
-          color="white"
-          align="center"
-          font="kelsonsans"
-        ></a-text>
-        
+        <a-box position="0 0.5 0" material="color: red;" scale="0.5 0.5 0.5"></a-box>
+        <a-text value="Привет, мир!" position="-0.5 1 0" scale="1.5 1.5 1.5" color="blue"></a-text>
       </a-marker>
-      
       <a-entity camera></a-entity>
     </a-scene>
     
-    <!-- Простая инструкция -->
-    <div style="position: fixed; bottom: 30px; left: 20px; right: 20px; background: rgba(0,0,0,0.7); color: white; padding: 15px; border-radius: 50px; text-align: center; font-family: Arial; font-size: 16px; backdrop-filter: blur(5px);">
-      🌍 Наведите камеру на маркер HIRO
-    </div>
-    
-    <!-- Ссылка на маркер HIRO (для тех у кого нет распечатки) -->
-    <div style="position: fixed; top: 20px; right: 20px; background: white; padding: 10px; border-radius: 10px; font-family: Arial; font-size: 12px; max-width: 200px;">
-      📱 Нет маркера? <a href="https://github.com/AR-js-org/AR.js/raw/master/data/data/hiro.png" target="_blank">Скачать HIRO маркер</a> (открой на телефоне)
+    <div style="position: fixed; bottom: 20px; left: 20px; background: white; padding: 10px; border-radius: 5px;">
+      Наведи камеру на маркер HIRO
     </div>
   </body>
 </html>
+вернёмся к этому коду, давай так чтобы на маркер hiro появлялась модель земли, что я тебе присылала
