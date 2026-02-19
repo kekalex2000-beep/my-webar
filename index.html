@@ -3,19 +3,33 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Меркурий в AR</title>
+    <title>Меркурий в AR — исправленная версия</title>
     
     <script src="https://cdn.jsdelivr.net/npm/aframe@1.4.0"></script>
     <script src="https://cdn.jsdelivr.net/npm/@ar-js-org/ar.js@3.4.0"></script>
     
     <style>
-      body { margin: 0; overflow: hidden; font-family: 'Arial', sans-serif; }
+      body { 
+        margin: 0; 
+        overflow: hidden; 
+        font-family: 'Arial', sans-serif; 
+      }
       .info {
-        position: fixed; bottom: 30px; left: 20px; right: 20px;
-        background: rgba(0, 0, 0, 0.7); color: white;
-        padding: 15px 25px; border-radius: 50px;
-        text-align: center; font-size: 16px;
-        z-index: 9999; max-width: 400px; margin: 0 auto;
+        position: fixed; 
+        bottom: 30px; 
+        left: 20px; 
+        right: 20px;
+        background: rgba(0, 0, 0, 0.7); 
+        color: white;
+        padding: 15px 25px; 
+        border-radius: 50px;
+        text-align: center; 
+        font-size: 16px;
+        z-index: 9999; 
+        max-width: 400px; 
+        margin: 0 auto;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255,255,255,0.2);
       }
     </style>
   </head>
@@ -25,59 +39,122 @@
     <a-scene 
       embedded 
       arjs="detectionMode: mono_and_matrix; matrixCodeType: 3x3; debugUIEnabled: false;"
-      renderer="antialias: true; alpha: true; colorManagement: true;"
+      renderer="antialias: true; alpha: true;"
       vr-mode-ui="enabled: false"
     >
       
-      <!-- Глобальное освещение для равномерной закраски -->
-      <a-entity light="type: ambient; color: #FFFFFF; intensity: 0.6"></a-entity>
-      <a-entity light="type: hemisphere; color: #FFF; groundColor: #444; intensity: 0.8"></a-entity>
-      <a-entity light="type: directional; color: #FFF; intensity: 0.7" position="1 2 1"></a-entity>
+      <!-- ОСВЕЩЕНИЕ -->
+      <a-entity light="type: ambient; color: #FFFFFF; intensity: 0.8"></a-entity>
+      <a-entity light="type: directional; color: #FFFFFF; intensity: 0.8" position="1 2 2"></a-entity>
       
-      <!-- ПРЕЗАГРУЗКА ТЕКСТУРЫ -->
+      <!-- ТЕКСТУРЫ - теперь с надежных источников -->
       <a-assets>
-        <!-- Используем прямую ссылку на карту поверхности -->
-        <img id="mercury-texture" 
-             src="https://upload.wikimedia.org/wikipedia/commons/3/30/Mercury_in_color_-_Prockter07_centered.jpg" 
+        <!-- Вариант 1: Текстура Меркурия с GitHub (наиболее надежно) -->
+        <img id="mercury-texture-1" 
+             src="https://raw.githubusercontent.com/aframevr/sample-assets/master/assets/images/space/mercury.jpg" 
+             crossorigin="anonymous">
+        
+        <!-- Вариант 2: Запасная текстура с NASA (более детальная) -->
+        <img id="mercury-texture-2" 
+             src="https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/planets/mercury.jpg" 
+             crossorigin="anonymous">
+        
+        <!-- Вариант 3: Еще один источник -->
+        <img id="mercury-texture-3" 
+             src="https://i.imgur.com/3K5g4Kb.jpg" 
              crossorigin="anonymous">
       </a-assets>
       
       <!-- МЕРКУРИЙ - код 6 -->
-      <a-marker type="barcode" value="6">
+      <a-marker type="barcode" value="6" id="mercury-marker">
         <a-entity rotation="-90 0 0">
+          
+          <!-- Основная планета (пытаемся загрузить первый вариант) -->
           <a-sphere 
             radius="0.5" 
-            src="#mercury-texture"
-            segments-width="64"
-            segments-height="64"
+            src="#mercury-texture-1"
+            segments-width="128"
+            segments-height="128"
             position="0 0.3 0"
-            animation="property: rotation; to: 0 360 0; loop: true; dur: 15000; easing: linear"
-            material="shader: standard; metalness: 0.0; roughness: 0.8; side: front"
+            animation="property: rotation; to: 0 360 0; loop: true; dur: 8000; easing: linear"
+            material="shader: standard; metalness: 0.2; roughness: 0.8;"
           ></a-sphere>
+          
+          <!-- Легкое свечение атмосферы (у Меркурия почти нет, но для красоты) -->
+          <a-sphere
+            radius="0.52"
+            position="0 0.3 0"
+            material="color: #888888; opacity: 0.1; transparent: true; side: double;"
+          ></a-sphere>
+          
         </a-entity>
-        <a-text value="Меркурий" position="0 0.9 0" scale="1.5 1.5 1.5" color="#A9A9A9" align="center"></a-text>
+        
+        <!-- Текст -->
+        <a-text 
+          value="Меркурий" 
+          position="0 0.9 0" 
+          scale="1.5 1.5 1.5" 
+          color="#CCCCCC"
+          align="center"
+          font="kelsonsans"
+          shadow="true"
+        ></a-text>
+        
       </a-marker>
       
+      <!-- Камера -->
       <a-entity camera></a-entity>
       
     </a-scene>
     
+    <!-- Инструкция -->
     <div class="info">
-      🪐 Наведи камеру на маркер №6 (Меркурий)
+      ☿ Наведи камеру на QR-код №6 (Меркурий)
     </div>
 
+    <!-- Скрипт для отладки и переключения текстур -->
     <script>
-      // Отладка загрузки
-      document.querySelector('a-scene').addEventListener('loaded', () => {
-        console.log('✅ Сцена загружена');
-        const texture = document.getElementById('mercury-texture');
-        if (texture.complete) {
-          console.log('✅ Текстура готова (кэш)');
-        } else {
-          texture.onload = () => console.log('✅ Текстура загружена');
-          texture.onerror = (e) => console.error('❌ Ошибка текстуры', e);
-        }
-      });
+      (function() {
+        console.log('🚀 Запуск AR для Меркурия');
+        
+        // Ждем загрузки сцены
+        document.addEventListener('DOMContentLoaded', function() {
+          const marker = document.getElementById('mercury-marker');
+          const sphere = document.querySelector('a-sphere[src="#mercury-texture-1"]');
+          const textures = [
+            '#mercury-texture-1',
+            '#mercury-texture-2', 
+            '#mercury-texture-3'
+          ];
+          let currentTexture = 0;
+          
+          // Функция проверки загрузки текстуры
+          function checkTexture() {
+            const img = document.querySelector(`img[id="${textures[currentTexture].replace('#', '')}"]`);
+            if (img && img.complete && img.naturalHeight > 0) {
+              console.log(`✅ Текстура ${currentTexture + 1} загружена`);
+              return true;
+            }
+            return false;
+          }
+          
+          // Если первая текстура не загрузилась за 3 секунды, пробуем следующую
+          setTimeout(function() {
+            if (!checkTexture() && currentTexture < textures.length - 1) {
+              currentTexture++;
+              console.log(`🔄 Пробуем текстуру ${currentTexture + 1}...`);
+              if (sphere) {
+                sphere.setAttribute('src', textures[currentTexture]);
+              }
+            }
+          }, 3000);
+          
+          // Сообщаем о готовности
+          document.querySelector('a-scene').addEventListener('loaded', function() {
+            console.log('✅ Сцена готова');
+          });
+        });
+      })();
     </script>
 
   </body>
