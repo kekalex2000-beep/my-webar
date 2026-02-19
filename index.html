@@ -5,9 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Солнечная система в AR</title>
     
-    <!-- Подключаем библиотеки -->
+    <!-- Библиотеки -->
     <script src="https://cdn.jsdelivr.net/npm/aframe"></script>
     <script src="https://cdn.jsdelivr.net/npm/@ar-js-org/ar.js"></script>
+    <!-- Компонент для анимации GLB (опционально) -->
+    <script src="https://cdn.jsdelivr.net/npm/aframe-extras@7.0.0/dist/aframe-extras.min.js"></script>
     
     <style>
       body { margin: 0; overflow: hidden; font-family: 'Arial', sans-serif; }
@@ -20,65 +22,57 @@
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
         z-index: 9999; max-width: 400px; margin: 0 auto;
       }
+      .loading {
+        position: fixed; top: 50%; left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(0,0,0,0.8); color: #fff;
+        padding: 20px 30px; border-radius: 15px;
+        font-size: 14px; z-index: 10000;
+        display: none;
+      }
     </style>
   </head>
   
   <body>
   
-    <!-- AR-сцена с CORS и правильным рендерером -->
+    <!-- Индикатор загрузки -->
+    <div class="loading" id="loading">🪐 Загрузка моделей...</div>
+    
+    <!-- AR-сцена -->
     <a-scene 
       embedded 
       arjs="detectionMode: mono_and_matrix; matrixCodeType: 3x3; debugUIEnabled: false;"
       renderer="antialias: true; alpha: true; colorManagement: true"
-      crossorigin="anonymous"
+      loading-screen="enabled: false"
     >
       
-      <!-- Глобальное фоновое освещение -->
-      <a-entity light="type: ambient; color: #FFF; intensity: 0.6"></a-entity>
-      <!-- Мягкий направленный свет для объёма -->
-      <a-entity light="type: directional; color: #FFF; intensity: 0.4" position="1 1 0.5"></a-entity>
+      <!-- Освещение (мягкое, чтобы не перебивать запечённый свет в GLB) -->
+      <a-entity light="type: ambient; color: #FFF; intensity: 0.7"></a-entity>
+      <a-entity light="type: directional; color: #FFF; intensity: 0.3" position="1 2 1"></a-entity>
       
-      <!-- Базовые настройки материалов для всех сфер -->
+      <!-- ПРЕЗАГРУЗКА МОДЕЛЕЙ -->
       <a-assets>
-        <img id="earth" crossorigin="anonymous" src="https://cdn.jsdelivr.net/gh/mrdoob/three.js@dev/examples/textures/planets/earth_atmos_2048.jpg">
-        <img id="mercury" crossorigin="anonymous" src="https://cdn.jsdelivr.net/gh/mrdoob/three.js@dev/examples/textures/planets/mercury.jpg">
-        <img id="venus" crossorigin="anonymous" src="https://cdn.jsdelivr.net/gh/mrdoob/three.js@dev/examples/textures/planets/venus.jpg">
-        <img id="mars" crossorigin="anonymous" src="https://cdn.jsdelivr.net/gh/mrdoob/three.js@dev/examples/textures/planets/mars.jpg">
-        <img id="jupiter" crossorigin="anonymous" src="https://cdn.jsdelivr.net/gh/mrdoob/three.js@dev/examples/textures/planets/jupiter.jpg">
-        <img id="saturn" crossorigin="anonymous" src="https://cdn.jsdelivr.net/gh/mrdoob/three.js@dev/examples/textures/planets/saturn.jpg">
-        <img id="saturn-ring" crossorigin="anonymous" src="https://cdn.jsdelivr.net/gh/mrdoob/three.js@dev/examples/textures/planets/saturn-ring.png">
-        <img id="uranus" crossorigin="anonymous" src="https://cdn.jsdelivr.net/gh/mrdoob/three.js@dev/examples/textures/planets/uranus.jpg">
-        <img id="neptune" crossorigin="anonymous" src="https://cdn.jsdelivr.net/gh/mrdoob/three.js@dev/examples/textures/planets/neptune.jpg">
-        <img id="sun" crossorigin="anonymous" src="https://cdn.jsdelivr.net/gh/mrdoob/three.js@dev/examples/textures/planets/sun.jpg">
+        <a-asset-item id="earth-model" src="models/Earth.glb"></a-asset-item>
+        <a-asset-item id="mercury-model" src="models/Mercury.glb"></a-asset-item>
+        <a-asset-item id="venus-model" src="models/Venus.glb"></a-asset-item>
+        <a-asset-item id="mars-model" src="models/Mars.glb"></a-asset-item>
+        <a-asset-item id="jupiter-model" src="models/Jupiter.glb"></a-asset-item>
+        <a-asset-item id="saturn-model" src="models/Saturn.glb"></a-asset-item>
+        <a-asset-item id="uranus-model" src="models/Uranus.glb"></a-asset-item>
+        <a-asset-item id="neptune-model" src="models/Neptune.glb"></a-asset-item>
       </a-assets>
-      
-      <!-- СОЛНЦЕ - код 4 -->
-      <a-marker type="barcode" value="4">
-        <a-entity rotation="-90 0 0">
-          <a-sphere 
-            radius="0.7" 
-            src="#sun"
-            position="0 0.2 0"
-            animation="property: rotation; to: 0 360 0; loop: true; dur: 25000; easing: linear"
-            material="shader: standard; emissive: #FF6600; emissive-intensity: 0.4; roughness: 0.2; side: double"
-          ></a-sphere>
-          <!-- Мягкое свечение, не влияющее на другие объекты -->
-          <a-entity light="type: point; color: #FFAA33; intensity: 0.2; distance: 3; decay: 2"></a-entity>
-        </a-entity>
-        <a-text value="Солнце" position="0 1.1 0" scale="1.5 1.5 1.5" color="#FFD700" align="center" font="kelsonsans"></a-text>
-      </a-marker>
       
       <!-- ЗЕМЛЯ - код 5 -->
       <a-marker type="barcode" value="5">
         <a-entity rotation="-90 20 0">
-          <a-sphere 
-            radius="0.5" 
-            src="#earth"
-            segments-width="64" segments-height="64"
+          <a-entity 
+            gltf-model="#earth-model" 
+            scale="0.012 0.012 0.012"
             position="0 0.5 0"
             animation="property: rotation; to: 0 360 0; loop: true; dur: 10000; easing: linear"
-            material="shader: standard; metalness: 0.1; roughness: 0.6; side: double"
-          ></a-sphere>
+            animation-mixer="clip: *; timeScale: 1"
+          ></a-entity>
+          <a-sphere radius="0.5" color="#4CAF50" visible="false"></a-sphere>
         </a-entity>
         <a-text value="Земля" position="0 0.9 0" scale="1.5 1.5 1.5" color="#4CAF50" align="center" font="kelsonsans"></a-text>
       </a-marker>
@@ -86,13 +80,13 @@
       <!-- МЕРКУРИЙ - код 6 -->
       <a-marker type="barcode" value="6">
         <a-entity rotation="-90 0 0">
-          <a-sphere 
-            radius="0.4" 
-            src="#mercury"
+          <a-entity 
+            gltf-model="#mercury-model" 
+            scale="0.01 0.01 0.01"
             position="0 0.2 0"
             animation="property: rotation; to: 0 360 0; loop: true; dur: 8000; easing: linear"
-            material="shader: standard; roughness: 0.9; metalness: 0.2; side: double"
-          ></a-sphere>
+          ></a-entity>
+          <a-sphere radius="0.4" color="#A9A9A9" visible="false"></a-sphere>
         </a-entity>
         <a-text value="Меркурий" position="0 0.8 0" scale="1.2 1.2 1.2" color="#A9A9A9" align="center" font="kelsonsans"></a-text>
       </a-marker>
@@ -100,13 +94,13 @@
       <!-- ВЕНЕРА - код 7 -->
       <a-marker type="barcode" value="7">
         <a-entity rotation="-90 0 0">
-          <a-sphere 
-            radius="0.45" 
-            src="#venus"
+          <a-entity 
+            gltf-model="#venus-model" 
+            scale="0.011 0.011 0.011"
             position="0 0.2 0"
             animation="property: rotation; to: 0 360 0; loop: true; dur: 12000; easing: linear"
-            material="shader: standard; roughness: 0.7; metalness: 0.1; side: double"
-          ></a-sphere>
+          ></a-entity>
+          <a-sphere radius="0.45" color="#FFE4B5" visible="false"></a-sphere>
         </a-entity>
         <a-text value="Венера" position="0 0.85 0" scale="1.3 1.3 1.3" color="#FFE4B5" align="center" font="kelsonsans"></a-text>
       </a-marker>
@@ -114,13 +108,13 @@
       <!-- МАРС - код 8 -->
       <a-marker type="barcode" value="8">
         <a-entity rotation="-90 0 0">
-          <a-sphere 
-            radius="0.45" 
-            src="#mars"
+          <a-entity 
+            gltf-model="#mars-model" 
+            scale="0.011 0.011 0.011"
             position="0 0.2 0"
             animation="property: rotation; to: 0 360 0; loop: true; dur: 9000; easing: linear"
-            material="shader: standard; roughness: 0.8; metalness: 0.15; side: double"
-          ></a-sphere>
+          ></a-entity>
+          <a-sphere radius="0.45" color="#CD5C5C" visible="false"></a-sphere>
         </a-entity>
         <a-text value="Марс" position="0 0.85 0" scale="1.3 1.3 1.3" color="#CD5C5C" align="center" font="kelsonsans"></a-text>
       </a-marker>
@@ -128,13 +122,13 @@
       <!-- ЮПИТЕР - код 9 -->
       <a-marker type="barcode" value="9">
         <a-entity rotation="-90 0 0">
-          <a-sphere 
-            radius="0.65" 
-            src="#jupiter"
+          <a-entity 
+            gltf-model="#jupiter-model" 
+            scale="0.014 0.014 0.014"
             position="0 0.2 0"
             animation="property: rotation; to: 0 360 0; loop: true; dur: 6000; easing: linear"
-            material="shader: standard; roughness: 0.5; metalness: 0.1; side: double"
-          ></a-sphere>
+          ></a-entity>
+          <a-sphere radius="0.65" color="#D2B48C" visible="false"></a-sphere>
         </a-entity>
         <a-text value="Юпитер" position="0 1.1 0" scale="1.5 1.5 1.5" color="#D2B48C" align="center" font="kelsonsans"></a-text>
       </a-marker>
@@ -143,20 +137,21 @@
       <a-marker type="barcode" value="10">
         <a-entity rotation="-90 30 0">
           <!-- Планета -->
-          <a-sphere 
-            radius="0.55" 
-            src="#saturn"
+          <a-entity 
+            gltf-model="#saturn-model" 
+            scale="0.013 0.013 0.013"
             position="0 0.2 0"
             animation="property: rotation; to: 0 360 0; loop: true; dur: 7000; easing: linear"
-            material="shader: standard; roughness: 0.5; metalness: 0.1; side: double"
-          ></a-sphere>
-          <!-- Кольцо Сатурна -->
-          <a-ring
-            radius-inner="0.75" radius-outer="1.1"
-            src="#saturn-ring"
-            position="0 0.2 0" rotation="90 0 0"
-            material="side: double; transparent: true; opacity: 0.9"
-          ></a-ring>
+          ></a-entity>
+          <!-- Кольцо (отдельная модель или часть основной) -->
+          <a-entity 
+            gltf-model="#saturn-ring-model" 
+            scale="0.013 0.013 0.013"
+            position="0 0.2 0"
+            rotation="90 0 0"
+            visible="true"
+          ></a-entity>
+          <a-sphere radius="0.55" color="#DEB887" visible="false"></a-sphere>
         </a-entity>
         <a-text value="Сатурн" position="0 1.0 0" scale="1.4 1.4 1.4" color="#DEB887" align="center" font="kelsonsans"></a-text>
       </a-marker>
@@ -164,13 +159,13 @@
       <!-- УРАН - код 11 -->
       <a-marker type="barcode" value="11">
         <a-entity rotation="-90 0 0">
-          <a-sphere 
-            radius="0.5" 
-            src="#uranus"
+          <a-entity 
+            gltf-model="#uranus-model" 
+            scale="0.012 0.012 0.012"
             position="0 0.2 0"
             animation="property: rotation; to: 0 360 0; loop: true; dur: 8000; easing: linear"
-            material="shader: standard; roughness: 0.4; metalness: 0.1; side: double"
-          ></a-sphere>
+          ></a-entity>
+          <a-sphere radius="0.5" color="#7FFFD4" visible="false"></a-sphere>
         </a-entity>
         <a-text value="Уран" position="0 0.9 0" scale="1.4 1.4 1.4" color="#7FFFD4" align="center" font="kelsonsans"></a-text>
       </a-marker>
@@ -178,26 +173,12 @@
       <!-- НЕПТУН - код 12 -->
       <a-marker type="barcode" value="12">
         <a-entity rotation="-90 0 0">
-          <a-sphere 
-            radius="0.5" 
-            src="#neptune"
+          <a-entity 
+            gltf-model="#neptune-model" 
+            scale="0.012 0.012 0.012"
             position="0 0.2 0"
             animation="property: rotation; to: 0 360 0; loop: true; dur: 9000; easing: linear"
-            material="shader: standard; roughness: 0.4; metalness: 0.1; side: double"
-          ></a-sphere>
+          ></a-entity>
+          <a-sphere radius="0.5" color="#4169E1" visible="false"></a-sphere>
         </a-entity>
-        <a-text value="Нептун" position="0 0.9 0" scale="1.4 1.4 1.4" color="#4169E1" align="center" font="kelsonsans"></a-text>
-      </a-marker>
-      
-      <!-- Камера -->
-      <a-entity camera></a-entity>
-      
-    </a-scene>
-    
-    <!-- Интерфейс -->
-    <div class="info">
-      🪐 Наведи камеру на QR-код с номером планеты
-    </div>
-
-  </body>
-</html>
+        <a-text value="Нептун" position="0 0.9 0" scale="1.4 1.4 
