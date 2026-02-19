@@ -10,16 +10,15 @@
   <body>
     <a-scene embedded arjs>
       <a-marker preset="hiro">
-        
-        <!-- Пробуем разные модели Земли со Sketchfab (по очереди) -->
-        
-        <!-- ВАРИАНТ 1: Красивая текстурированная Земля -->
-        <a-entity
-          gltf-model="https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/models/gltf/earth/earth.gltf"
-          scale="0.3 0.3 0.3"
-          position="0 0.5 0"
-          animation="property: rotation; to: 0 360 0; loop: true; dur: 10000"
-        ></a-entity>
+
+<a-sphere 
+  radius="0.5" 
+  src="https://threejs.org/examples/textures/planets/earth_atmos_2048.jpg"
+  segments-width="64"
+  segments-height="64"
+  position="0 0.5 0"
+  animation="property: rotation; to: 0 360 0; loop: true; dur: 10000"
+></a-sphere>
         
         <!-- ВАРИАНТ 2: Если вариант 1 не работает, раскомментируй этот:
         <a-sphere 
