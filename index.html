@@ -3,49 +3,108 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Земля с Sketchfab на маркере HIRO</title>
+    <title>Земля в AR — маркер HIRO</title>
+    
+    <!-- Подключаем библиотеки -->
     <script src="https://cdn.jsdelivr.net/npm/aframe"></script>
     <script src="https://cdn.jsdelivr.net/npm/@ar-js-org/ar.js"></script>
+    
+    <!-- Немного стилей для красивого интерфейса -->
+    <style>
+      body {
+        margin: 0;
+        overflow: hidden;
+        font-family: 'Arial', sans-serif;
+      }
+      .info {
+        position: fixed;
+        bottom: 30px;
+        left: 20px;
+        right: 20px;
+        background: rgba(0, 0, 0, 0.7);
+        backdrop-filter: blur(10px);
+        color: white;
+        padding: 15px 25px;
+        border-radius: 50px;
+        text-align: center;
+        font-size: 16px;
+        font-weight: 500;
+        letter-spacing: 0.5px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        z-index: 9999;
+        max-width: 400px;
+        margin: 0 auto;
+      }
+      .marker-link {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(5px);
+        padding: 12px 20px;
+        border-radius: 40px;
+        font-size: 14px;
+        font-weight: 600;
+        color: #1a1a2e;
+        text-decoration: none;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        border: 1px solid rgba(255, 215, 0, 0.3);
+        z-index: 9999;
+        transition: transform 0.2s;
+      }
+      .marker-link:hover {
+        transform: scale(1.05);
+        background: white;
+      }
+    </style>
   </head>
+  
   <body>
-    <a-scene embedded arjs>
+    <!-- AR-сцена -->
+    <a-scene embedded arjs="debugUIEnabled: false;">
+      
+      <!-- Маркер HIRO -->
       <a-marker preset="hiro">
-
-<a-sphere 
-  radius="0.5" 
-  src="https://threejs.org/examples/textures/planets/earth_atmos_2048.jpg"
-  segments-width="64"
-  segments-height="64"
-  position="0 0.5 0"
-  animation="property: rotation; to: 0 360 0; loop: true; dur: 10000"
-></a-sphere>
         
-        <!-- ВАРИАНТ 2: Если вариант 1 не работает, раскомментируй этот:
+        <!-- ВРАЩАЮЩАЯСЯ ЗЕМЛЯ -->
         <a-sphere 
           radius="0.5" 
           src="https://threejs.org/examples/textures/planets/earth_atmos_2048.jpg"
           segments-width="64"
           segments-height="64"
           position="0 0.5 0"
-          animation="property: rotation; to: 0 360 0; loop: true; dur: 10000"
+          animation="property: rotation; to: 0 360 0; loop: true; dur: 10000; easing: linear"
+          material="shader: standard; metalness: 0.1; roughness: 0.5;"
         ></a-sphere>
-        -->
         
-        <!-- ВАРИАНТ 3: Если нужна простая тестовая модель:
-        <a-entity
-          gltf-model="https://threejs.org/examples/models/gltf/DamagedHelmet/glTF/DamagedHelmet.gltf"
-          scale="0.3 0.3 0.3"
-          position="0 0.5 0"
-        ></a-entity>
-        -->
+        <!-- Подпись (по желанию) -->
+        <a-text 
+          value="Планета Земля" 
+          position="-0.6 1.3 0" 
+          scale="1.5 1.5 1.5" 
+          color="#FFD700"
+          align="center"
+          font="kelsonsans"
+          shadow
+        ></a-text>
         
-        <a-text value="Земля со Sketchfab" position="-0.8 1.2 0" scale="1.2 1.2 1.2" color="white"></a-text>
       </a-marker>
+      
+      <!-- Камера -->
       <a-entity camera></a-entity>
+      
     </a-scene>
     
-    <div style="position: fixed; bottom: 20px; left: 20px; background: white; padding: 10px; border-radius: 5px; z-index: 1000;">
-      🌍 Наведи камеру на маркер HIRO
+    <!-- Элементы интерфейса -->
+    <div class="info">
+      🌍 Наведите камеру на маркер HIRO
     </div>
+    
+    <a href="https://github.com/AR-js-org/AR.js/raw/master/data/data/hiro.png" 
+       target="_blank" 
+       class="marker-link">
+      🖨️ Скачать маркер HIRO
+    </a>
   </body>
 </html>
