@@ -25,15 +25,18 @@
     <a-scene 
       embedded 
       arjs="detectionMode: mono_and_matrix; matrixCodeType: 3x3; debugUIEnabled: false;"
-      renderer="antialias: true; alpha: true; logLevel: error;"
+      renderer="antialias: true; alpha: true; colorManagement: true;"
+      vr-mode-ui="enabled: false"
     >
       
-      <!-- ОСВЕЩЕНИЕ - критично для текстур! -->
-      <a-entity light="type: ambient; color: #FFFFFF; intensity: 0.8"></a-entity>
-      <a-entity light="type: directional; color: #FFFFFF; intensity: 0.6" position="1 2 1"></a-entity>
+      <!-- Глобальное освещение для равномерной закраски -->
+      <a-entity light="type: ambient; color: #FFFFFF; intensity: 0.6"></a-entity>
+      <a-entity light="type: hemisphere; color: #FFF; groundColor: #444; intensity: 0.8"></a-entity>
+      <a-entity light="type: directional; color: #FFF; intensity: 0.7" position="1 2 1"></a-entity>
       
       <!-- ПРЕЗАГРУЗКА ТЕКСТУРЫ -->
       <a-assets>
+        <!-- Используем прямую ссылку на карту поверхности -->
         <img id="mercury-texture" 
              src="https://upload.wikimedia.org/wikipedia/commons/3/30/Mercury_in_color_-_Prockter07_centered.jpg" 
              crossorigin="anonymous">
@@ -48,8 +51,8 @@
             segments-width="64"
             segments-height="64"
             position="0 0.3 0"
-            animation="property: rotation; to: 0 360 0; loop: true; dur: 10000; easing: linear"
-            material="shader: standard; metalness: 0.1; roughness: 0.7; side: double"
+            animation="property: rotation; to: 0 360 0; loop: true; dur: 15000; easing: linear"
+            material="shader: standard; metalness: 0.0; roughness: 0.8; side: front"
           ></a-sphere>
         </a-entity>
         <a-text value="Меркурий" position="0 0.9 0" scale="1.5 1.5 1.5" color="#A9A9A9" align="center"></a-text>
@@ -64,12 +67,16 @@
     </div>
 
     <script>
-      // Отладка: проверяем загрузку текстуры
+      // Отладка загрузки
       document.querySelector('a-scene').addEventListener('loaded', () => {
         console.log('✅ Сцена загружена');
         const texture = document.getElementById('mercury-texture');
-        texture.onload = () => console.log('✅ Текстура загружена');
-        texture.onerror = () => console.error('❌ Ошибка загрузки текстуры');
+        if (texture.complete) {
+          console.log('✅ Текстура готова (кэш)');
+        } else {
+          texture.onload = () => console.log('✅ Текстура загружена');
+          texture.onerror = (e) => console.error('❌ Ошибка текстуры', e);
+        }
       });
     </script>
 
