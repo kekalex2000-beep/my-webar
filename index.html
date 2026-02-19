@@ -3,66 +3,126 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Меркурий в AR</title>
+    <title>Планеты в AR — QR-маркеры</title>
     
-    <script src="https://cdn.jsdelivr.net/npm/aframe@1.4.0"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@ar-js-org/ar.js@3.4.0"></script>
+    <!-- Подключаем библиотеки -->
+    <script src="https://cdn.jsdelivr.net/npm/aframe"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@ar-js-org/ar.js"></script>
     
     <style>
-      body { margin: 0; overflow: hidden; font-family: 'Arial', sans-serif; }
+      body {
+        margin: 0;
+        overflow: hidden;
+        font-family: 'Arial', sans-serif;
+      }
       .info {
-        position: fixed; bottom: 30px; left: 20px; right: 20px;
-        background: rgba(0, 0, 0, 0.7); color: white;
-        padding: 15px 25px; border-radius: 50px;
-        text-align: center; font-size: 16px;
-        z-index: 9999; max-width: 400px; margin: 0 auto;
+        position: fixed;
+        bottom: 30px;
+        left: 20px;
+        right: 20px;
+        background: rgba(0, 0, 0, 0.7);
+        backdrop-filter: blur(10px);
+        color: white;
+        padding: 15px 25px;
+        border-radius: 50px;
+        text-align: center;
+        font-size: 16px;
+        font-weight: 500;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        z-index: 9999;
+        max-width: 400px;
+        margin: 0 auto;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+      .marker-hint {
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(255, 165, 0, 0.9);
+        color: #000;
+        padding: 10px 20px;
+        border-radius: 30px;
+        font-size: 14px;
+        font-weight: 600;
+        z-index: 9999;
+        text-align: center;
+        max-width: 90%;
       }
     </style>
   </head>
   
   <body>
-  
-    <a-scene 
-      embedded 
-      arjs="detectionMode: mono_and_matrix; matrixCodeType: 3x3; debugUIEnabled: false;"
-      renderer="antialias: true; alpha: true; colorManagement: true;"
-      vr-mode-ui="enabled: false"
-    >
+    <!-- AR-сцена с поддержкой матричных кодов -->
+    <a-scene embedded arjs="detectionMode: mono_and_matrix; matrixCodeType: 3x3; debugUIEnabled: false;">
       
-      <!-- Освещение -->
-      <a-entity light="type: ambient; color: #FFFFFF; intensity: 0.6"></a-entity>
-      <a-entity light="type: hemisphere; color: #FFF; groundColor: #444; intensity: 0.8"></a-entity>
-      <a-entity light="type: directional; color: #FFF; intensity: 0.7" position="1 2 1"></a-entity>
+      <!-- ========== ЗЕМЛЯ (QR-код: 5) ========== -->
+      <a-marker type="barcode" value="5">
+        <a-entity rotation="-90 20 0">
+          <a-sphere 
+            radius="0.5" 
+            src="https://threejs.org/examples/textures/planets/earth_atmos_2048.jpg"
+            segments-width="64"
+            segments-height="64"
+            position="0 0.5 0"
+            animation="property: rotation; to: 0 360 0; loop: true; dur: 10000; easing: linear"
+            material="shader: standard; metalness: 0.1; roughness: 0.5;"
+          ></a-sphere>
+        </a-entity>
+        <a-text 
+          value="🌍 Планета Земля" 
+          position="0 1.2 0" 
+          scale="1.5 1.5 1.5" 
+          color="#4FC3F7"
+          align="center"
+          font="kelsonsans"
+          shadow
+        ></a-text>
+      </a-marker>
       
-      <!-- Текстура: ПРАВИЛЬНАЯ карта поверхности -->
-      <a-assets>
-        <img id="mercury-texture" 
-             src="https://www.solarsystemscope.com/textures/download/2k_mercury.jpg" 
-             crossorigin="anonymous">
-      </a-assets>
-      
-      <!-- МЕРКУРИЙ - код 6 -->
-      <a-marker type="barcode" value="6">
+      <!-- ========== ВЕНЕРА (QR-код: 7) ========== -->
+      <a-marker type="barcode" value="7">
         <a-entity rotation="-90 0 0">
           <a-sphere 
             radius="0.5" 
-            src="#mercury-texture"
+            src="https://threejs.org/examples/textures/planets/venus_2048.jpg"
             segments-width="64"
             segments-height="64"
-            position="0 0.3 0"
-            animation="property: rotation; to: 0 360 0; loop: true; dur: 15000; easing: linear"
-            material="shader: standard; metalness: 0.0; roughness: 0.9; side: front"
+            position="0 0.5 0"
+            animation="property: rotation; to: 0 -360 0; loop: true; dur: 25000; easing: linear"
+            material="shader: standard; metalness: 0.0; roughness: 0.9; emissive: #553300; emissiveIntensity: 0.15;"
+          ></a-sphere>
+          <!-- Атмосферное свечение Венеры -->
+          <a-sphere 
+            radius="0.52" 
+            position="0 0.5 0"
+            material="color: #FFA500; transparent: true; opacity: 0.15; shader: flat;"
           ></a-sphere>
         </a-entity>
-        <a-text value="Меркурий" position="0 0.9 0" scale="1.5 1.5 1.5" color="#A9A9A9" align="center"></a-text>
+        <a-text 
+          value="🔥 Венера" 
+          position="0 1.2 0" 
+          scale="1.5 1.5 1.5" 
+          color="#FFA500"
+          align="center"
+          font="kelsonsans"
+          shadow
+        ></a-text>
       </a-marker>
       
+      <!-- Камера -->
       <a-entity camera></a-entity>
       
     </a-scene>
     
+    <!-- Интерфейс -->
+    <div class="marker-hint">
+      🪐 Наведите камеру на QR-код: <b>5</b> — Земля, <b>7</b> — Венера
+    </div>
     <div class="info">
-      🪐 Наведи камеру на маркер №6 (Меркурий)
+      📱 Держите маркер в поле зрения камеры для стабильного AR-эффекта
     </div>
 
   </body>
