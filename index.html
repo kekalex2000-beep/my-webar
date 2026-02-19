@@ -1,113 +1,53 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Земля в AR — Европа спереди</title>
-    
-    <!-- Подключаем библиотеки -->
-    <script src="https://cdn.jsdelivr.net/npm/aframe"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@ar-js-org/ar.js"></script>
-    
-    <style>
-      body {
-        margin: 0;
-        overflow: hidden;
-        font-family: 'Arial', sans-serif;
-      }
-      .info {
-        position: fixed;
-        bottom: 30px;
-        left: 20px;
-        right: 20px;
-        background: rgba(0, 0, 0, 0.7);
-        backdrop-filter: blur(10px);
-        color: white;
-        padding: 15px 25px;
-        border-radius: 50px;
-        text-align: center;
-        font-size: 16px;
-        font-weight: 500;
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-        z-index: 9999;
-        max-width: 400px;
-        margin: 0 auto;
-      }
-      .marker-link {
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(5px);
-        padding: 12px 20px;
-        border-radius: 40px;
-        font-size: 14px;
-        font-weight: 600;
-        color: #1a1a2e;
-        text-decoration: none;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-        border: 1px solid rgba(255, 215, 0, 0.3);
-        z-index: 9999;
-        transition: transform 0.2s;
-      }
-      .marker-link:hover {
-        transform: scale(1.05);
-        background: white;
-      }
-    </style>
-  </head>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Тест NFT маркера Земля</title>
   
-  <body>
-    <!-- AR-сцена -->
-    <a-scene embedded arjs="debugUIEnabled: false;">
-      
-      <!-- Маркер HIRO -->
-      <a-marker preset="hiro">
-        
-        <!-- КОНТЕЙНЕР для Земли с правильным начальным поворотом -->
-        <a-entity rotation="0 20 0">  <!-- Поворачиваем всю группу так, чтобы Европа была спереди -->
-          
-          <!-- ВРАЩАЮЩАЯСЯ ЗЕМЛЯ -->
-          <a-sphere 
-            radius="0.5" 
-            src="https://threejs.org/examples/textures/planets/earth_atmos_2048.jpg"
-            segments-width="64"
-            segments-height="64"
-            position="0 0.5 0"
-            animation="property: rotation; to: 0 360 0; loop: true; dur: 10000; easing: linear"
-            material="shader: standard; metalness: 0.1; roughness: 0.5;"
-          ></a-sphere>
-          
-        </a-entity>
-        
-        <!-- Подпись (отдельно, чтобы не вращалась вместе с Землёй) -->
-        <a-text 
-          value="Европа" 
-          position="0 1.2 0" 
-          scale="1.5 1.5 1.5" 
-          color="#FFD700"
-          align="center"
-          font="kelsonsans"
-          shadow
-        ></a-text>
-        
-      </a-marker>
-      
-      <!-- Камера -->
-      <a-entity camera></a-entity>
-      
-    </a-scene>
+  <!-- Важно: используем версию с поддержкой NFT -->
+  <script src="https://cdn.jsdelivr.net/npm/aframe@1.4.0/dist/aframe-master.min.js"></script>
+  <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
+  
+  <style>
+    body { margin: 0; overflow: hidden; }
+    #info {
+      position: fixed; bottom: 20px; left: 20px; right: 20px;
+      background: rgba(0,0,0,0.7); color: white; padding: 15px;
+      border-radius: 30px; text-align: center; z-index: 9999;
+      font-family: Arial; backdrop-filter: blur(5px);
+    }
+  </style>
+</head>
+<body>
+  <a-scene embedded arjs="sourceType: webcam; trackingMethod: best; debugUIEnabled: false;">
     
-    <!-- Элементы интерфейса -->
-    <div class="info">
-      🌍 Европа повёрнута к вам! Наведите камеру на маркер HIRO
-    </div>
+    <!-- Подключаем NFT маркер -->
+    <a-assets>
+      <a-asset-item id="nft-marker" src="https://github.com/kekalex2000-beep/my-webar/raw/refs/heads/main/markers/Earth.fset"></a-asset-item>
+    </a-assets>
     
-    <a href="https://github.com/AR-js-org/AR.js/raw/master/data/data/hiro.png" 
-       target="_blank" 
-       class="marker-link">
-      🖨️ Скачать маркер HIRO
-    </a>
-  </body>
+    <!-- Сам NFT маркер -->
+    <a-nft
+      type="nft"
+      url="https://github.com/kekalex2000-beep/my-webar/raw/refs/heads/main/markers/Earth.fset"
+      smooth="true"
+      smoothCount="5"
+      smoothTolerance="0.01"
+      smoothThreshold="5"
+    >
+      
+      <!-- Тестовый куб (вместо Земли, чтобы проверить маркер) -->
+      <a-box color="red" position="0 0.5 0" scale="0.3 0.3 0.3"></a-box>
+      <a-text value="NFT работает!" position="-0.5 1 0" scale="1.5 1.5 1.5" color="white"></a-text>
+      
+    </a-nft>
+    
+    <a-entity camera></a-entity>
+  </a-scene>
+  
+  <div id="info">
+    🧪 Тестируем NFT: наведите камеру на изображение, из которого создан маркер Earth
+  </div>
+</body>
 </html>
