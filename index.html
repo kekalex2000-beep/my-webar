@@ -65,23 +65,27 @@
       <!-- Маркер HIRO -->
       <a-marker preset="hiro">
         
-        <!-- ВРАЩАЮЩАЯСЯ ЗЕМЛЯ С ЕВРОПОЙ СПЕРЕДИ -->
-        <a-sphere 
-          radius="0.5" 
-          src="https://threejs.org/examples/textures/planets/earth_atmos_2048.jpg"
-          segments-width="64"
-          segments-height="64"
-          position="0 0.5 0"
-          rotation="0 20 0"  <!-- Поворачиваем Землю так, чтобы Европа была спереди -->
-          animation="property: rotation; to: 360 380 0; loop: true; dur: 10000; easing: linear"
-          material="shader: standard; metalness: 0.1; roughness: 0.5;"
-        ></a-sphere>
+        <!-- КОНТЕЙНЕР для Земли с правильным начальным поворотом -->
+        <a-entity rotation="0 20 0">  <!-- Поворачиваем всю группу так, чтобы Европа была спереди -->
+          
+          <!-- ВРАЩАЮЩАЯСЯ ЗЕМЛЯ -->
+          <a-sphere 
+            radius="0.5" 
+            src="https://threejs.org/examples/textures/planets/earth_atmos_2048.jpg"
+            segments-width="64"
+            segments-height="64"
+            position="0 0.5 0"
+            animation="property: rotation; to: 0 360 0; loop: true; dur: 10000; easing: linear"
+            material="shader: standard; metalness: 0.1; roughness: 0.5;"
+          ></a-sphere>
+          
+        </a-entity>
         
-        <!-- Подпись -->
+        <!-- Подпись (отдельно, чтобы не вращалась вместе с Землёй) -->
         <a-text 
           value="Европа" 
-          position="-0.2 1.2 0" 
-          scale="1.2 1.2 1.2" 
+          position="0 1.2 0" 
+          scale="1.5 1.5 1.5" 
           color="#FFD700"
           align="center"
           font="kelsonsans"
@@ -97,7 +101,7 @@
     
     <!-- Элементы интерфейса -->
     <div class="info">
-      🌍 Европа ждёт! Наведи камеру на маркер HIRO
+      🌍 Европа повёрнута к вам! Наведите камеру на маркер HIRO
     </div>
     
     <a href="https://github.com/AR-js-org/AR.js/raw/master/data/data/hiro.png" 
