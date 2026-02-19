@@ -3,11 +3,11 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Планеты в AR — QR-маркеры</title>
+    <title>Земля в AR — QR-маркер</title>
     
     <!-- Подключаем библиотеки -->
-    <script src="https://cdn.jsdelivr.net/npm/aframe"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@ar-js-org/ar.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/aframe  "></script>
+    <script src="https://cdn.jsdelivr.net/npm/@ar-js-org/ar.js  "></script>
     
     <style>
       body {
@@ -18,8 +18,8 @@
       .info {
         position: fixed;
         bottom: 30px;
-        left: 50%;
-        transform: translateX(-50%);
+        left: 20px;
+        right: 20px;
         background: rgba(0, 0, 0, 0.7);
         backdrop-filter: blur(10px);
         color: white;
@@ -32,113 +32,45 @@
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
         z-index: 9999;
         max-width: 400px;
-      }
-      .marker-hint {
-        position: fixed;
-        top: 20px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: linear-gradient(135deg, #FFD54F, #FFA726);
-        color: #000;
-        padding: 10px 20px;
-        border-radius: 30px;
-        font-size: 14px;
-        font-weight: 600;
-        z-index: 9999;
-        text-align: center;
-        max-width: 90%;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        margin: 0 auto;
       }
     </style>
   </head>
   
   <body>
-    <!-- AR-сцена -->
+    <!-- AR-сцена с поддержкой матричных кодов -->
     <a-scene embedded arjs="detectionMode: mono_and_matrix; matrixCodeType: 3x3; debugUIEnabled: false;">
       
-      <!-- ========== ЗЕМЛЯ (QR-код: 5) ========== -->
+      <!-- QR-маркер со значением 5 -->
       <a-marker type="barcode" value="5">
-        <a-entity rotation="-90 20 0">
+        
+        <!-- Группа с Землёй (правильный поворот: экватор горизонтально, Европа спереди) -->
+        <a-entity rotation="-90 20 0">  <!-- -90 по X убирает Антарктиду наверх, 20 по Y поворачивает Европой -->
+          
+          <!-- Красивая текстурированная Земля -->
           <a-sphere 
             radius="0.5" 
-            src="https://threejs.org/examples/textures/planets/earth_atmos_2048.jpg"
+            src="https://threejs.org/examples/textures/planets/earth_atmos_2048.jpg  "
             segments-width="64"
             segments-height="64"
             position="0 0.5 0"
             animation="property: rotation; to: 0 360 0; loop: true; dur: 10000; easing: linear"
             material="shader: standard; metalness: 0.1; roughness: 0.5;"
           ></a-sphere>
-        </a-entity>
-        <a-text 
-          value="🌍 Планета Земля" 
-          position="0 1.2 0" 
-          scale="1.5 1.5 1.5" 
-          color="#4FC3F7"
-          align="center"
-          font="kelsonsans"
-          shadow
-        ></a-text>
-      </a-marker>
-      
-      <!-- ========== ВЕНЕРА (QR-код: 7) ========== -->
-      <a-marker type="barcode" value="7">
-        <a-entity rotation="-90 0 0">
-          
-          <!-- Основной слой: облака Венеры (NASA, общественное достояние) -->
-          <a-sphere 
-            radius="0.5" 
-            src="https://upload.wikimedia.org/wikipedia/commons/8/8e/Venus_Cloud_Map_%28artistic%29.jpg"
-            position="0 0.5 0"
-            segments-width="64"
-            segments-height="64"
-            material="
-              shader: standard;
-              roughness: 0.98;
-              metalness: 0.0;
-              emissive: #E8D5B7;
-              emissiveIntensity: 0.12;
-              color: #FFF8E7;
-            "
-            animation="property: rotation; to: 0 -360 0; loop: true; dur: 60000; easing: linear"
-          ></a-sphere>
-          
-          <!-- Атмосферная дымка: мягкий полупрозрачный слой -->
-          <a-sphere 
-            radius="0.515" 
-            position="0 0.5 0"
-            material="
-              color: #FFF4E0;
-              transparent: true;
-              opacity: 0.18;
-              shader: flat;
-              side: back;
-            "
-          ></a-sphere>
-          
-          <!-- Внешний ореол: имитация рассеяния света в плотной атмосфере -->
-          <a-sphere 
-            radius="0.54" 
-            position="0 0.5 0"
-            material="
-              color: #FFE08A;
-              transparent: true;
-              opacity: 0.08;
-              shader: flat;
-              side: back;
-            "
-          ></a-sphere>
           
         </a-entity>
         
+        <!-- Подпись (не вращается) -->
         <a-text 
-          value="☁️ Венера" 
+          value="Планета Земля" 
           position="0 1.2 0" 
           scale="1.5 1.5 1.5" 
-          color="#FFD54F"
+          color="#FFD700"
           align="center"
           font="kelsonsans"
           shadow
         ></a-text>
+        
       </a-marker>
       
       <!-- Камера -->
@@ -146,13 +78,12 @@
       
     </a-scene>
     
-    <!-- Интерфейс -->
-    <div class="marker-hint">
-      🪐 QR-коды: <b>5</b> — Земля 🌍 | <b>7</b> — Венера ☁️
-    </div>
+    <!-- Интерфейс (только инструкция, кнопка удалена) -->
     <div class="info">
-      📱 Наведите камеру на маркер и держите стабильно
+      📱 Наведите камеру на QR-код со значением "5"
     </div>
 
   </body>
 </html>
+
+дополни этот код так, чтобы ещё была и венера, код 7
