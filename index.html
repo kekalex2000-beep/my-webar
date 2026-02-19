@@ -10,7 +10,15 @@
   <body>
     <a-scene embedded arjs>
       <a-marker preset="hiro">
-        <a-box position="0 0.5 0" material="color: red;" scale="0.5 0.5 0.5"></a-box>
+        <!-- ВАША МОДЕЛЬ ЗЕМЛИ вместо красного куба -->
+        <a-entity
+          gltf-model="https://github.com/kekalex2000-beep/my-webar/raw/refs/heads/main/models/Earth.glb"
+          scale="0.3 0.3 0.3"
+          position="0 0.5 0"
+          animation="property: rotation; to: 0 360 0; loop: true; dur: 10000"
+        ></a-entity>
+        
+        <!-- Текст оставляем как есть -->
         <a-text value="Привет, мир!" position="-0.5 1 0" scale="1.5 1.5 1.5" color="blue"></a-text>
       </a-marker>
       <a-entity camera></a-entity>
@@ -21,4 +29,3 @@
     </div>
   </body>
 </html>
-вернёмся к этому коду, давай так чтобы на маркер hiro появлялась модель земли, что я тебе присылала
