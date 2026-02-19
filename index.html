@@ -3,29 +3,50 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Мой первый WebAR</title>
+    <title>Земля с Sketchfab на маркере HIRO</title>
     <script src="https://cdn.jsdelivr.net/npm/aframe"></script>
     <script src="https://cdn.jsdelivr.net/npm/@ar-js-org/ar.js"></script>
   </head>
   <body>
     <a-scene embedded arjs>
       <a-marker preset="hiro">
-        <!-- ВАША МОДЕЛЬ ЗЕМЛИ вместо красного куба -->
         
-<a-entity
-  gltf-model="https://threejs.org/examples/models/gltf/DamagedHelmet/glTF/DamagedHelmet.gltf"
-  scale="0.3 0.3 0.3"
-  position="0 0.5 0"
-></a-entity>>
+        <!-- Пробуем разные модели Земли со Sketchfab (по очереди) -->
         
-        <!-- Текст оставляем как есть -->
-        <a-text value="Привет, мир!" position="-0.5 1 0" scale="1.5 1.5 1.5" color="blue"></a-text>
+        <!-- ВАРИАНТ 1: Красивая текстурированная Земля -->
+        <a-entity
+          gltf-model="https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/models/gltf/earth/earth.gltf"
+          scale="0.3 0.3 0.3"
+          position="0 0.5 0"
+          animation="property: rotation; to: 0 360 0; loop: true; dur: 10000"
+        ></a-entity>
+        
+        <!-- ВАРИАНТ 2: Если вариант 1 не работает, раскомментируй этот:
+        <a-sphere 
+          radius="0.5" 
+          src="https://threejs.org/examples/textures/planets/earth_atmos_2048.jpg"
+          segments-width="64"
+          segments-height="64"
+          position="0 0.5 0"
+          animation="property: rotation; to: 0 360 0; loop: true; dur: 10000"
+        ></a-sphere>
+        -->
+        
+        <!-- ВАРИАНТ 3: Если нужна простая тестовая модель:
+        <a-entity
+          gltf-model="https://threejs.org/examples/models/gltf/DamagedHelmet/glTF/DamagedHelmet.gltf"
+          scale="0.3 0.3 0.3"
+          position="0 0.5 0"
+        ></a-entity>
+        -->
+        
+        <a-text value="Земля со Sketchfab" position="-0.8 1.2 0" scale="1.2 1.2 1.2" color="white"></a-text>
       </a-marker>
       <a-entity camera></a-entity>
     </a-scene>
     
-    <div style="position: fixed; bottom: 20px; left: 20px; background: white; padding: 10px; border-radius: 5px;">
-      Наведи камеру на маркер HIRO
+    <div style="position: fixed; bottom: 20px; left: 20px; background: white; padding: 10px; border-radius: 5px; z-index: 1000;">
+      🌍 Наведи камеру на маркер HIRO
     </div>
   </body>
 </html>
