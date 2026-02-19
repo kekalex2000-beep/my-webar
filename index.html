@@ -34,27 +34,6 @@
         max-width: 400px;
         margin: 0 auto;
       }
-      .marker-link {
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(5px);
-        padding: 12px 20px;
-        border-radius: 40px;
-        font-size: 14px;
-        font-weight: 600;
-        color: #1a1a2e;
-        text-decoration: none;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-        border: 1px solid rgba(255, 215, 0, 0.3);
-        z-index: 9999;
-        transition: transform 0.2s;
-      }
-      .marker-link:hover {
-        transform: scale(1.05);
-        background: white;
-      }
     </style>
   </head>
   
@@ -65,8 +44,8 @@
       <!-- QR-маркер со значением 5 -->
       <a-marker type="barcode" value="5">
         
-        <!-- Группа с Землёй (повёрнута Европой) -->
-        <a-entity rotation="0 20 0">  <!-- Европа смотрит на нас -->
+        <!-- Группа с Землёй (правильный поворот: экватор горизонтально, Европа спереди) -->
+        <a-entity rotation="-90 20 0">  <!-- -90 по X убирает Антарктиду наверх, 20 по Y поворачивает Европой -->
           
           <!-- Красивая текстурированная Земля -->
           <a-sphere 
@@ -99,22 +78,10 @@
       
     </a-scene>
     
-    <!-- Интерфейс -->
+    <!-- Интерфейс (только инструкция, кнопка удалена) -->
     <div class="info">
       📱 Наведите камеру на QR-код со значением "5"
     </div>
-    
-    <a href="#" id="qrLink" class="marker-link" target="_blank">
-      🖨️ Скачать QR-маркер
-    </a>
 
-    <script>
-      // Скрипт для генерации ссылки на QR-код
-      document.getElementById('qrLink').addEventListener('click', function(e) {
-        e.preventDefault();
-        // Открываем страницу с генератором QR-кодов AR.js
-        window.open('http://au.gmented.com/app/marker/marker.php?mid=5', '_blank');
-      });
-    </script>
   </body>
 </html>
