@@ -63,20 +63,7 @@
   </head>
   
   <body>
-    <!-- Подсказка с кодами -->
-    <div class="marker-grid">
-      🔢 Коды планет: 
-      <span>☀️ Солнце-4</span>
-      <span>☿ Меркурий-6</span>
-      <span>♀ Венера-7</span>
-      <span>🌍 Земля-5</span>
-      <span>♂ Марс-8</span>
-      <span>♃ Юпитер-9</span>
-      <span>♄ Сатурн-10</span>
-      <span>♅ Уран-11</span>
-      <span>♆ Нептун-12</span>
-    </div>
-
+  
     <!-- AR-сцена с поддержкой матричных кодов -->
     <a-scene embedded arjs="detectionMode: mono_and_matrix; matrixCodeType: 3x3; debugUIEnabled: false;">
       
@@ -105,8 +92,8 @@
             src="https://threejs.org/examples/textures/planets/earth_atmos_2048.jpg"
             segments-width="64"
             segments-height="64"
-            position="0 0.2 0"
-            animation="property: rotation; to: 0 360 0; loop: true; dur: 10000;"
+            position="0 0.5 0"
+            animation="property: rotation; to: 0 360 0; loop: true; dur: 10000; easing: linear"
             material="shader: standard; metalness: 0.1; roughness: 0.5;"
           ></a-sphere>
         </a-entity>
