@@ -18,8 +18,8 @@
       .info {
         position: fixed;
         bottom: 30px;
-        left: 20px;
-        right: 20px;
+        left: 50%;
+        transform: translateX(-50%);
         background: rgba(0, 0, 0, 0.7);
         backdrop-filter: blur(10px);
         color: white;
@@ -33,15 +33,13 @@
         z-index: 9999;
         max-width: 400px;
         margin: 0 auto;
-        left: 50%;
-        transform: translateX(-50%);
       }
       .marker-hint {
         position: fixed;
         top: 20px;
         left: 50%;
         transform: translateX(-50%);
-        background: rgba(255, 165, 0, 0.9);
+        background: linear-gradient(135deg, #FFD54F, #FFA726);
         color: #000;
         padding: 10px 20px;
         border-radius: 30px;
@@ -50,6 +48,7 @@
         z-index: 9999;
         text-align: center;
         max-width: 90%;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
       }
     </style>
   </head>
@@ -85,27 +84,65 @@
       <!-- ========== ВЕНЕРА (QR-код: 7) ========== -->
       <a-marker type="barcode" value="7">
         <a-entity rotation="-90 0 0">
+          <!-- Основная сфера Венеры: плотные облака, без видимой поверхности -->
           <a-sphere 
             radius="0.5" 
-            src="https://threejs.org/examples/textures/planets/venus_2048.jpg"
+            position="0 0.5 0"
             segments-width="64"
             segments-height="64"
-            position="0 0.5 0"
-            animation="property: rotation; to: 0 -360 0; loop: true; dur: 25000; easing: linear"
-            material="shader: standard; metalness: 0.0; roughness: 0.9; emissive: #553300; emissiveIntensity: 0.15;"
-          ></a-sphere>
-          <!-- Атмосферное свечение Венеры -->
+            material="
+              color: #F5E6D3;
+              shader: standard;
+              roughness: 0.95;
+              metalness: 0.0;
+              emissive: #E8C49E;
+              emissiveIntensity: 0.08;
+            "
+            animation="property: rotation; to: 0 -360 0; loop: true; dur: 60000; easing: linear"
+          >
+            <!-- Легкая процедурная "облачность" через noise-подобный эффект -->
+            <a-animation 
+              attribute="material.displacementScale"
+              to="0.02"
+              dur="8000"
+              direction="alternate"
+              loop="true"
+              easing="easeInOutSine"
+            ></a-animation>
+          </a-sphere>
+          
+          <!-- Атмосферная дымка (внешний полупрозрачный слой) -->
           <a-sphere 
-            radius="0.52" 
+            radius="0.53" 
             position="0 0.5 0"
-            material="color: #FFA500; transparent: true; opacity: 0.15; shader: flat;"
+            material="
+              color: #FFF4E0;
+              transparent: true;
+              opacity: 0.12;
+              shader: flat;
+              side: back;
+            "
+          ></a-sphere>
+          
+          <!-- Тонкий ореол свечения -->
+          <a-sphere 
+            radius="0.56" 
+            position="0 0.5 0"
+            material="
+              color: #FFD54F;
+              transparent: true;
+              opacity: 0.06;
+              shader: flat;
+              side: back;
+            "
           ></a-sphere>
         </a-entity>
+        
         <a-text 
-          value="🔥 Венера" 
+          value="☁️ Венера" 
           position="0 1.2 0" 
           scale="1.5 1.5 1.5" 
-          color="#FFA500"
+          color="#FFD54F"
           align="center"
           font="kelsonsans"
           shadow
@@ -119,10 +156,10 @@
     
     <!-- Интерфейс -->
     <div class="marker-hint">
-      🪐 Наведите камеру на QR-код: <b>5</b> — Земля, <b>7</b> — Венера
+      🪐 QR-коды: <b>5</b> — Земля 🌍 | <b>7</b> — Венера ☁️
     </div>
     <div class="info">
-      📱 Держите маркер в поле зрения камеры для стабильного AR-эффекта
+      📱 Наведите камеру на маркер и держите стабильно
     </div>
 
   </body>
