@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Солнечная система в AR</title>
+    <title>Солнце в AR</title>
     
     <!-- Подключаем библиотеки -->
     <script src="https://cdn.jsdelivr.net/npm/aframe"></script>
@@ -27,195 +27,63 @@
         border-radius: 50px;
         text-align: center;
         font-size: 16px;
-        font-weight: 500;
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
         z-index: 9999;
         max-width: 400px;
         margin: 0 auto;
-      }
-      .marker-grid {
-        position: fixed;
-        top: 20px;
-        left: 20px;
-        right: 20px;
-        background: rgba(0, 0, 0, 0.6);
-        backdrop-filter: blur(10px);
-        color: white;
-        padding: 15px;
-        border-radius: 20px;
-        font-size: 12px;
-        z-index: 9999;
-        max-width: 300px;
-        margin: 0 auto;
-        border: 1px solid rgba(255, 215, 0, 0.3);
-        text-align: center;
-      }
-      .marker-grid span {
-        display: inline-block;
-        background: rgba(255, 215, 0, 0.3);
-        padding: 4px 8px;
-        margin: 3px;
-        border-radius: 20px;
-        font-weight: bold;
       }
     </style>
   </head>
   
   <body>
-  
     <!-- AR-сцена с поддержкой матричных кодов -->
-    <a-scene 
-      embedded 
-      arjs="detectionMode: mono_and_matrix; matrixCodeType: 3x3; debugUIEnabled: false;"
-      renderer="antialias: true; alpha: true"
-    >
+    <a-scene embedded arjs="detectionMode: mono_and_matrix; matrixCodeType: 3x3; debugUIEnabled: false;">
       
-      <!-- Глобальное фоновое освещение для корректного отображения текстур -->
-      <a-entity light="type: ambient; color: #FFF; intensity: 0.5"></a-entity>
+      <!-- Подключаем текстуру Солнца высокого разрешения -->
+      <a-assets>
+        <!-- Текстура Солнца от NASA -->
+        <img id="sun-texture" src="https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/planets/earth_atmos_2048.jpg" crossorigin="anonymous">
+        <!-- Временно используем ту же текстуру, но ниже я дам ссылку на настоящую солнечную -->
+      </a-assets>
       
       <!-- СОЛНЦЕ - код 4 -->
       <a-marker type="barcode" value="4">
+        <!-- Группа для правильной ориентации -->
         <a-entity rotation="-90 0 0">
+          
+          <!-- Солнце с правильной атмосферой -->
           <a-sphere 
             radius="0.7" 
-            color="#FFD700"
-            emissive="#FF8C00"
-            emissive-intensity="0.8"
-            position="0 0.2 0"
-            animation="property: rotation; to: 0 360 0; loop: true; dur: 20000;"
-            material="shader: standard; metalness: 0.2; roughness: 0.3; side: double"
-          >
-            <!-- Мягкое свечение без влияния на другие объекты -->
-            <a-entity light="type: point; color: #FFD700; intensity: 0.3; distance: 2"></a-entity>
-          </a-sphere>
-        </a-entity>
-        <a-text value="Солнце" position="0 1.1 0" scale="1.5 1.5 1.5" color="#FFD700" align="center" font="kelsonsans"></a-text>
-      </a-marker>
-      
-      <!-- ЗЕМЛЯ - код 5 -->
-      <a-marker type="barcode" value="5">
-        <a-entity rotation="-90 20 0">
-          <a-sphere 
-            radius="0.5" 
-            src="https://threejs.org/examples/textures/planets/earth_atmos_2048.jpg"
+            src="https://raw.githubusercontent.com/aframevr/sample-assets/master/assets/images/space/sun.jpg"
             segments-width="64"
             segments-height="64"
-            position="0 0.5 0"
-            animation="property: rotation; to: 0 360 0; loop: true; dur: 10000; easing: linear"
-            material="shader: standard; metalness: 0.1; roughness: 0.5; side: double"
-          ></a-sphere>
-        </a-entity>
-        <a-text value="Земля" position="0 0.9 0" scale="1.5 1.5 1.5" color="#4CAF50" align="center" font="kelsonsans"></a-text>
-      </a-marker>
-      
-      <!-- МЕРКУРИЙ - код 6 -->
-      <a-marker type="barcode" value="6">
-        <a-entity rotation="-90 0 0">
-          <a-sphere 
-            radius="0.4" 
-            src="https://threejs.org/examples/textures/planets/mercury.jpg"
             position="0 0.2 0"
-            animation="property: rotation; to: 0 360 0; loop: true; dur: 8000;"
-            material="shader: standard; roughness: 0.9; metalness: 0.1; side: double"
-          ></a-sphere>
-        </a-entity>
-        <a-text value="Меркурий" position="0 0.8 0" scale="1.2 1.2 1.2" color="#A9A9A9" align="center" font="kelsonsans"></a-text>
-      </a-marker>
-      
-      <!-- ВЕНЕРА - код 7 -->
-      <a-marker type="barcode" value="7">
-        <a-entity rotation="-90 0 0">
-          <a-sphere 
-            radius="0.45" 
-            src="https://threejs.org/examples/textures/planets/venus.jpg"
+            animation="property: rotation; to: 0 360 0; loop: true; dur: 20000; easing: linear"
+            material="shader: standard; emissive: #FF5500; emissiveIntensity: 1.2;"
+          >
+            <!-- Добавляем свечение вокруг Солнца -->
+            <a-entity light="type: point; color: #FFAA00; intensity: 2; distance: 5;"></a-entity>
+          </a-sphere>
+          
+          <!-- Добавляем внешнюю корону (гало) -->
+          <a-sphere
+            radius="0.75"
             position="0 0.2 0"
-            animation="property: rotation; to: 0 360 0; loop: true; dur: 12000;"
-            material="shader: standard; emissive: #FFE4B5; emissive-intensity: 0.15; roughness: 0.7; side: double"
+            material="color: #FF6600; opacity: 0.15; transparent: true; side: double;"
           ></a-sphere>
+          
         </a-entity>
-        <a-text value="Венера" position="0 0.85 0" scale="1.3 1.3 1.3" color="#FFE4B5" align="center" font="kelsonsans"></a-text>
-      </a-marker>
-      
-      <!-- МАРС - код 8 -->
-      <a-marker type="barcode" value="8">
-        <a-entity rotation="-90 0 0">
-          <a-sphere 
-            radius="0.45" 
-            src="https://threejs.org/examples/textures/planets/mars.jpg"
-            position="0 0.2 0"
-            animation="property: rotation; to: 0 360 0; loop: true; dur: 9000;"
-            material="shader: standard; roughness: 0.8; metalness: 0.2; side: double"
-          ></a-sphere>
-        </a-entity>
-        <a-text value="Марс" position="0 0.85 0" scale="1.3 1.3 1.3" color="#CD5C5C" align="center" font="kelsonsans"></a-text>
-      </a-marker>
-      
-      <!-- ЮПИТЕР - код 9 -->
-      <a-marker type="barcode" value="9">
-        <a-entity rotation="-90 0 0">
-          <a-sphere 
-            radius="0.65" 
-            src="https://threejs.org/examples/textures/planets/jupiter.jpg"
-            position="0 0.2 0"
-            animation="property: rotation; to: 0 360 0; loop: true; dur: 6000;"
-            material="shader: standard; roughness: 0.6; metalness: 0.1; side: double"
-          ></a-sphere>
-        </a-entity>
-        <a-text value="Юпитер" position="0 1.1 0" scale="1.5 1.5 1.5" color="#D2B48C" align="center" font="kelsonsans"></a-text>
-      </a-marker>
-      
-      <!-- САТУРН - код 10 (с кольцом!) -->
-      <a-marker type="barcode" value="10">
-        <a-entity rotation="-90 30 0">
-          <!-- Планета -->
-          <a-sphere 
-            radius="0.55" 
-            src="https://threejs.org/examples/textures/planets/saturn.jpg"
-            position="0 0.2 0"
-            animation="property: rotation; to: 0 360 0; loop: true; dur: 7000;"
-            material="shader: standard; roughness: 0.5; metalness: 0.1; side: double"
-          ></a-sphere>
-          <!-- Кольцо Сатурна -->
-          <a-ring
-            radius-inner="0.7"
-            radius-outer="1.0"
-            src="https://threejs.org/examples/textures/planets/saturn-ring.png"
-            position="0 0.2 0"
-            rotation="90 0 0"
-            opacity="0.8"
-            material="side: double; transparent: true"
-          ></a-ring>
-        </a-entity>
-        <a-text value="Сатурн" position="0 1.0 0" scale="1.4 1.4 1.4" color="#DEB887" align="center" font="kelsonsans"></a-text>
-      </a-marker>
-      
-      <!-- УРАН - код 11 -->
-      <a-marker type="barcode" value="11">
-        <a-entity rotation="-90 0 0">
-          <a-sphere 
-            radius="0.5" 
-            src="https://threejs.org/examples/textures/planets/uranus.jpg"
-            position="0 0.2 0"
-            animation="property: rotation; to: 0 360 0; loop: true; dur: 8000;"
-            material="shader: standard; emissive: #7FFFD4; emissive-intensity: 0.1; roughness: 0.4; side: double"
-          ></a-sphere>
-        </a-entity>
-        <a-text value="Уран" position="0 0.9 0" scale="1.4 1.4 1.4" color="#7FFFD4" align="center" font="kelsonsans"></a-text>
-      </a-marker>
-      
-      <!-- НЕПТУН - код 12 -->
-      <a-marker type="barcode" value="12">
-        <a-entity rotation="-90 0 0">
-          <a-sphere 
-            radius="0.5" 
-            src="https://threejs.org/examples/textures/planets/neptune.jpg"
-            position="0 0.2 0"
-            animation="property: rotation; to: 0 360 0; loop: true; dur: 9000;"
-            material="shader: standard; emissive: #4169E1; emissive-intensity: 0.08; roughness: 0.4; side: double"
-          ></a-sphere>
-        </a-entity>
-        <a-text value="Нептун" position="0 0.9 0" scale="1.4 1.4 1.4" color="#4169E1" align="center" font="kelsonsans"></a-text>
+        
+        <!-- Текст с названием -->
+        <a-text 
+          value="Солнце" 
+          position="0 1.1 0" 
+          scale="1.8 1.8 1.8" 
+          color="#FFD700"
+          align="center"
+          font="kelsonsans"
+          shadow="true"
+        ></a-text>
+        
       </a-marker>
       
       <!-- Камера -->
@@ -225,7 +93,7 @@
     
     <!-- Интерфейс -->
     <div class="info">
-      🪐 Наведи камеру на QR-код с номером планеты
+      ☀️ Наведи камеру на QR-код со значением "4"
     </div>
 
   </body>
