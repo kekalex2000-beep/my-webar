@@ -3,182 +3,75 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Солнечная система в AR</title>
+    <title>Меркурий в AR</title>
     
-    <!-- Библиотеки -->
-    <script src="https://cdn.jsdelivr.net/npm/aframe"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@ar-js-org/ar.js"></script>
-    <!-- Компонент для анимации GLB (опционально) -->
-    <script src="https://cdn.jsdelivr.net/npm/aframe-extras@7.0.0/dist/aframe-extras.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/aframe@1.4.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@ar-js-org/ar.js@3.4.0"></script>
     
     <style>
       body { margin: 0; overflow: hidden; font-family: 'Arial', sans-serif; }
       .info {
         position: fixed; bottom: 30px; left: 20px; right: 20px;
-        background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(10px);
-        color: white; padding: 15px 25px; border-radius: 50px;
-        text-align: center; font-size: 16px; font-weight: 500;
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        background: rgba(0, 0, 0, 0.7); color: white;
+        padding: 15px 25px; border-radius: 50px;
+        text-align: center; font-size: 16px;
         z-index: 9999; max-width: 400px; margin: 0 auto;
-      }
-      .loading {
-        position: fixed; top: 50%; left: 50%;
-        transform: translate(-50%, -50%);
-        background: rgba(0,0,0,0.8); color: #fff;
-        padding: 20px 30px; border-radius: 15px;
-        font-size: 14px; z-index: 10000;
-        display: none;
       }
     </style>
   </head>
   
   <body>
   
-    <!-- Индикатор загрузки -->
-    <div class="loading" id="loading">🪐 Загрузка моделей...</div>
-    
-    <!-- AR-сцена -->
     <a-scene 
       embedded 
       arjs="detectionMode: mono_and_matrix; matrixCodeType: 3x3; debugUIEnabled: false;"
-      renderer="antialias: true; alpha: true; colorManagement: true"
-      loading-screen="enabled: false"
+      renderer="antialias: true; alpha: true; logLevel: error;"
     >
       
-      <!-- Освещение (мягкое, чтобы не перебивать запечённый свет в GLB) -->
-      <a-entity light="type: ambient; color: #FFF; intensity: 0.7"></a-entity>
-      <a-entity light="type: directional; color: #FFF; intensity: 0.3" position="1 2 1"></a-entity>
+      <!-- ОСВЕЩЕНИЕ - критично для текстур! -->
+      <a-entity light="type: ambient; color: #FFFFFF; intensity: 0.8"></a-entity>
+      <a-entity light="type: directional; color: #FFFFFF; intensity: 0.6" position="1 2 1"></a-entity>
       
-      <!-- ПРЕЗАГРУЗКА МОДЕЛЕЙ -->
+      <!-- ПРЕЗАГРУЗКА ТЕКСТУРЫ -->
       <a-assets>
-        <a-asset-item id="earth-model" src="models/Earth.glb"></a-asset-item>
-        <a-asset-item id="mercury-model" src="models/Mercury.glb"></a-asset-item>
-        <a-asset-item id="venus-model" src="models/Venus.glb"></a-asset-item>
-        <a-asset-item id="mars-model" src="models/Mars.glb"></a-asset-item>
-        <a-asset-item id="jupiter-model" src="models/Jupiter.glb"></a-asset-item>
-        <a-asset-item id="saturn-model" src="models/Saturn.glb"></a-asset-item>
-        <a-asset-item id="uranus-model" src="models/Uranus.glb"></a-asset-item>
-        <a-asset-item id="neptune-model" src="models/Neptune.glb"></a-asset-item>
+        <img id="mercury-texture" 
+             src="https://upload.wikimedia.org/wikipedia/commons/3/30/Mercury_in_color_-_Prockter07_centered.jpg" 
+             crossorigin="anonymous">
       </a-assets>
-      
-      <!-- ЗЕМЛЯ - код 5 -->
-      <a-marker type="barcode" value="5">
-        <a-entity rotation="-90 20 0">
-          <a-entity 
-            gltf-model="#earth-model" 
-            scale="0.012 0.012 0.012"
-            position="0 0.5 0"
-            animation="property: rotation; to: 0 360 0; loop: true; dur: 10000; easing: linear"
-            animation-mixer="clip: *; timeScale: 1"
-          ></a-entity>
-          <a-sphere radius="0.5" color="#4CAF50" visible="false"></a-sphere>
-        </a-entity>
-        <a-text value="Земля" position="0 0.9 0" scale="1.5 1.5 1.5" color="#4CAF50" align="center" font="kelsonsans"></a-text>
-      </a-marker>
       
       <!-- МЕРКУРИЙ - код 6 -->
       <a-marker type="barcode" value="6">
         <a-entity rotation="-90 0 0">
-          <a-entity 
-            gltf-model="#mercury-model" 
-            scale="0.01 0.01 0.01"
-            position="0 0.2 0"
-            animation="property: rotation; to: 0 360 0; loop: true; dur: 8000; easing: linear"
-          ></a-entity>
-          <a-sphere radius="0.4" color="#A9A9A9" visible="false"></a-sphere>
+          <a-sphere 
+            radius="0.5" 
+            src="#mercury-texture"
+            segments-width="64"
+            segments-height="64"
+            position="0 0.3 0"
+            animation="property: rotation; to: 0 360 0; loop: true; dur: 10000; easing: linear"
+            material="shader: standard; metalness: 0.1; roughness: 0.7; side: double"
+          ></a-sphere>
         </a-entity>
-        <a-text value="Меркурий" position="0 0.8 0" scale="1.2 1.2 1.2" color="#A9A9A9" align="center" font="kelsonsans"></a-text>
+        <a-text value="Меркурий" position="0 0.9 0" scale="1.5 1.5 1.5" color="#A9A9A9" align="center"></a-text>
       </a-marker>
       
-      <!-- ВЕНЕРА - код 7 -->
-      <a-marker type="barcode" value="7">
-        <a-entity rotation="-90 0 0">
-          <a-entity 
-            gltf-model="#venus-model" 
-            scale="0.011 0.011 0.011"
-            position="0 0.2 0"
-            animation="property: rotation; to: 0 360 0; loop: true; dur: 12000; easing: linear"
-          ></a-entity>
-          <a-sphere radius="0.45" color="#FFE4B5" visible="false"></a-sphere>
-        </a-entity>
-        <a-text value="Венера" position="0 0.85 0" scale="1.3 1.3 1.3" color="#FFE4B5" align="center" font="kelsonsans"></a-text>
-      </a-marker>
+      <a-entity camera></a-entity>
       
-      <!-- МАРС - код 8 -->
-      <a-marker type="barcode" value="8">
-        <a-entity rotation="-90 0 0">
-          <a-entity 
-            gltf-model="#mars-model" 
-            scale="0.011 0.011 0.011"
-            position="0 0.2 0"
-            animation="property: rotation; to: 0 360 0; loop: true; dur: 9000; easing: linear"
-          ></a-entity>
-          <a-sphere radius="0.45" color="#CD5C5C" visible="false"></a-sphere>
-        </a-entity>
-        <a-text value="Марс" position="0 0.85 0" scale="1.3 1.3 1.3" color="#CD5C5C" align="center" font="kelsonsans"></a-text>
-      </a-marker>
-      
-      <!-- ЮПИТЕР - код 9 -->
-      <a-marker type="barcode" value="9">
-        <a-entity rotation="-90 0 0">
-          <a-entity 
-            gltf-model="#jupiter-model" 
-            scale="0.014 0.014 0.014"
-            position="0 0.2 0"
-            animation="property: rotation; to: 0 360 0; loop: true; dur: 6000; easing: linear"
-          ></a-entity>
-          <a-sphere radius="0.65" color="#D2B48C" visible="false"></a-sphere>
-        </a-entity>
-        <a-text value="Юпитер" position="0 1.1 0" scale="1.5 1.5 1.5" color="#D2B48C" align="center" font="kelsonsans"></a-text>
-      </a-marker>
-      
-      <!-- САТУРН - код 10 (с кольцом!) -->
-      <a-marker type="barcode" value="10">
-        <a-entity rotation="-90 30 0">
-          <!-- Планета -->
-          <a-entity 
-            gltf-model="#saturn-model" 
-            scale="0.013 0.013 0.013"
-            position="0 0.2 0"
-            animation="property: rotation; to: 0 360 0; loop: true; dur: 7000; easing: linear"
-          ></a-entity>
-          <!-- Кольцо (отдельная модель или часть основной) -->
-          <a-entity 
-            gltf-model="#saturn-ring-model" 
-            scale="0.013 0.013 0.013"
-            position="0 0.2 0"
-            rotation="90 0 0"
-            visible="true"
-          ></a-entity>
-          <a-sphere radius="0.55" color="#DEB887" visible="false"></a-sphere>
-        </a-entity>
-        <a-text value="Сатурн" position="0 1.0 0" scale="1.4 1.4 1.4" color="#DEB887" align="center" font="kelsonsans"></a-text>
-      </a-marker>
-      
-      <!-- УРАН - код 11 -->
-      <a-marker type="barcode" value="11">
-        <a-entity rotation="-90 0 0">
-          <a-entity 
-            gltf-model="#uranus-model" 
-            scale="0.012 0.012 0.012"
-            position="0 0.2 0"
-            animation="property: rotation; to: 0 360 0; loop: true; dur: 8000; easing: linear"
-          ></a-entity>
-          <a-sphere radius="0.5" color="#7FFFD4" visible="false"></a-sphere>
-        </a-entity>
-        <a-text value="Уран" position="0 0.9 0" scale="1.4 1.4 1.4" color="#7FFFD4" align="center" font="kelsonsans"></a-text>
-      </a-marker>
-      
-      <!-- НЕПТУН - код 12 -->
-      <a-marker type="barcode" value="12">
-        <a-entity rotation="-90 0 0">
-          <a-entity 
-            gltf-model="#neptune-model" 
-            scale="0.012 0.012 0.012"
-            position="0 0.2 0"
-            animation="property: rotation; to: 0 360 0; loop: true; dur: 9000; easing: linear"
-          ></a-entity>
-          <a-sphere radius="0.5" color="#4169E1" visible="false"></a-sphere>
-        </a-entity>
-        <a-text value="Нептун" position="0 0.9 0" scale="1.4 1.4 
+    </a-scene>
+    
+    <div class="info">
+      🪐 Наведи камеру на маркер №6 (Меркурий)
+    </div>
+
+    <script>
+      // Отладка: проверяем загрузку текстуры
+      document.querySelector('a-scene').addEventListener('loaded', () => {
+        console.log('✅ Сцена загружена');
+        const texture = document.getElementById('mercury-texture');
+        texture.onload = () => console.log('✅ Текстура загружена');
+        texture.onerror = () => console.error('❌ Ошибка загрузки текстуры');
+      });
+    </script>
+
+  </body>
+</html>
