@@ -3,73 +3,22 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Моя WebAR Земля - ИСПРАВЛЕННАЯ</title>
-    
-    <!-- Подключаем правильные версии библиотек -->
-    <script src="https://cdn.jsdelivr.net/npm/aframe@1.3.0/dist/aframe-master.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/ar.js@2.2.2/aframe/build/aframe-ar.js"></script>
+    <title>Мой первый WebAR</title>
+    <script src="https://cdn.jsdelivr.net/npm/aframe"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@ar-js-org/ar.js"></script>
   </head>
-  
-  <body style="margin: 0; overflow: hidden;">
-    <!-- Добавляем отладочную информацию -->
-    <div id="debug" style="position: fixed; top: 10px; left: 10px; background: red; color: white; padding: 10px; z-index: 10000; border-radius: 5px;">
-      Загрузка...
-    </div>
-
-    <!-- Основная AR-сцена с правильными параметрами -->
-    <a-scene
-      id="scene"
-      embedded
-      arjs="
-        sourceType: webcam;
-        debugUIEnabled: true;
-        detectionMode: mono_and_matrix;
-        matrixCodeType: 3x3;
-        cameraParametersUrl: https://raw.githubusercontent.com/AR-js-org/AR.js/master/data/data/camera_para.dat;
-      "
-      vr-mode-ui="enabled: false"
-      renderer="logarithmicDepthBuffer: true; precision: mediump;"
-    >
-      
-      <!-- ВАЖНО: Используем стандартный маркер для теста -->
-      <a-marker preset="hiro" id="test-marker">
-        <!-- Простой куб для проверки -->
-        <a-box color="red" position="0 0.5 0" scale="0.5 0.5 0.5"></a-box>
-        <a-text value="РАБОТАЕТ!" color="green" position="-0.5 1 0" scale="2 2 2"></a-text>
+  <body>
+    <a-scene embedded arjs>
+      <a-marker preset="hiro">
+        <a-box position="0 0.5 0" material="color: red;" scale="0.5 0.5 0.5"></a-box>
+        <a-text value="Привет, мир!" position="-0.5 1 0" scale="1.5 1.5 1.5" color="blue"></a-text>
       </a-marker>
-      
-      <!-- Ваш NFT маркер -->
-      <a-marker-camera
-        type="pattern"
-        url="https://github.com/kekalex2000-beep/my-webar/raw/refs/heads/main/markers/Earth.fset"
-        smooth="true"
-        smoothCount="5"
-        smoothTolerance="0.01"
-        smoothThreshold="5"
-      >
-        <!-- Ваша модель Земли -->
-        <a-entity
-          gltf-model="https://github.com/kekalex2000-beep/my-webar/raw/refs/heads/main/models/Earth.glb"
-          scale="0.3 0.3 0.3"
-          position="0 0.5 0"
-          animation="property: rotation; to: 0 360 0; loop: true; dur: 10000"
-        ></a-entity>
-      </a-marker-camera>
-      
       <a-entity camera></a-entity>
     </a-scene>
-
-    <script>
-      // Скрипт для отладки
-      setTimeout(() => {
-        document.getElementById('debug').innerHTML = 'Камера запущена. Наведите на HIRO маркер для теста';
-        document.getElementById('debug').style.background = 'green';
-      }, 5000);
-    </script>
     
-    <div style="position: fixed; bottom: 30px; left: 20px; right: 20px; background: rgba(0,0,0,0.8); color: white; padding: 15px; border-radius: 30px; text-align: center; font-family: Arial; z-index: 9999;">
-      <b>ШАГ 1:</b> Наведи на маркер HIRO (красный куб должен появиться)<br>
-      <b>ШАГ 2:</b> Потом пробуй свою картинку
+    <div style="position: fixed; bottom: 20px; left: 20px; background: white; padding: 10px; border-radius: 5px;">
+      Наведи камеру на маркер HIRO
     </div>
   </body>
 </html>
+как их этого кода сделать дополненную реальность, которая будет реагировать на картинку. Опиши каждый шагг
