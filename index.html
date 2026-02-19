@@ -32,7 +32,6 @@
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
         z-index: 9999;
         max-width: 400px;
-        margin: 0 auto;
       }
       .marker-hint {
         position: fixed;
@@ -54,7 +53,7 @@
   </head>
   
   <body>
-    <!-- AR-сцена с поддержкой матричных кодов -->
+    <!-- AR-сцена -->
     <a-scene embedded arjs="detectionMode: mono_and_matrix; matrixCodeType: 3x3; debugUIEnabled: false;">
       
       <!-- ========== ЗЕМЛЯ (QR-код: 5) ========== -->
@@ -84,58 +83,51 @@
       <!-- ========== ВЕНЕРА (QR-код: 7) ========== -->
       <a-marker type="barcode" value="7">
         <a-entity rotation="-90 0 0">
-          <!-- Основная сфера Венеры: плотные облака, без видимой поверхности -->
+          
+          <!-- Основной слой: облака Венеры (NASA, общественное достояние) -->
           <a-sphere 
             radius="0.5" 
+            src="https://upload.wikimedia.org/wikipedia/commons/8/8e/Venus_Cloud_Map_%28artistic%29.jpg"
             position="0 0.5 0"
             segments-width="64"
             segments-height="64"
             material="
-              color: #F5E6D3;
               shader: standard;
-              roughness: 0.95;
+              roughness: 0.98;
               metalness: 0.0;
-              emissive: #E8C49E;
-              emissiveIntensity: 0.08;
+              emissive: #E8D5B7;
+              emissiveIntensity: 0.12;
+              color: #FFF8E7;
             "
             animation="property: rotation; to: 0 -360 0; loop: true; dur: 60000; easing: linear"
-          >
-            <!-- Легкая процедурная "облачность" через noise-подобный эффект -->
-            <a-animation 
-              attribute="material.displacementScale"
-              to="0.02"
-              dur="8000"
-              direction="alternate"
-              loop="true"
-              easing="easeInOutSine"
-            ></a-animation>
-          </a-sphere>
+          ></a-sphere>
           
-          <!-- Атмосферная дымка (внешний полупрозрачный слой) -->
+          <!-- Атмосферная дымка: мягкий полупрозрачный слой -->
           <a-sphere 
-            radius="0.53" 
+            radius="0.515" 
             position="0 0.5 0"
             material="
               color: #FFF4E0;
               transparent: true;
-              opacity: 0.12;
+              opacity: 0.18;
               shader: flat;
               side: back;
             "
           ></a-sphere>
           
-          <!-- Тонкий ореол свечения -->
+          <!-- Внешний ореол: имитация рассеяния света в плотной атмосфере -->
           <a-sphere 
-            radius="0.56" 
+            radius="0.54" 
             position="0 0.5 0"
             material="
-              color: #FFD54F;
+              color: #FFE08A;
               transparent: true;
-              opacity: 0.06;
+              opacity: 0.08;
               shader: flat;
               side: back;
             "
           ></a-sphere>
+          
         </a-entity>
         
         <a-text 
