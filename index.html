@@ -1,84 +1,92 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Земля в AR — QR-маркер</title>
-    
-    <!-- Подключаем библиотеки -->
-    <script src="https://cdn.jsdelivr.net/npm/aframe  "></script>
-    <script src="https://cdn.jsdelivr.net/npm/@ar-js-org/ar.js  "></script>
-    
-    <style>
-      body {
-        margin: 0;
-        overflow: hidden;
-        font-family: 'Arial', sans-serif;
-      }
-      .info {
-        position: fixed;
-        bottom: 30px;
-        left: 20px;
-        right: 20px;
-        background: rgba(0, 0, 0, 0.7);
-        backdrop-filter: blur(10px);
-        color: white;
-        padding: 15px 25px;
-        border-radius: 50px;
-        text-align: center;
-        font-size: 16px;
-        font-weight: 500;
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-        z-index: 9999;
-        max-width: 400px;
-        margin: 0 auto;
-      }
-    </style>
-  </head>
-  
-  <body>
-    <!-- AR-сцена с поддержкой матричных кодов -->
-    <a-scene embedded arjs="detectionMode: mono_and_matrix; matrixCodeType: 3x3; debugUIEnabled: false;">
-      
-      <!-- QR-маркер со значением 5 -->
-      <a-marker type="barcode" value="5">
-        
-        <!-- Группа с Землёй (правильный поворот: экватор горизонтально, Европа спереди) -->
-        <a-entity rotation="-90 20 0">  <!-- -90 по X убирает Антарктиду наверх, 20 по Y поворачивает Европой -->
-          
-          <!-- Красивая текстурированная Земля -->
-          <a-sphere 
-            radius="0.5" 
-            src="https://threejs.org/examples/textures/planets/earth_atmos_2048.jpg  "
-            segments-width="64"
-            segments-height="64"
-            position="0 0.5 0"
-            animation="property: rotation; to: 0 360 0; loop: true; dur: 10000; easing: linear"
-            material="shader: standard; metalness: 0.1; roughness: 0.5;"
-          ></a-sphere>
-          
-        </a-entity>
-        
-        <!-- Подпись (не вращается) -->
-        <a-text 
-          value="Планета Земля" 
-          position="0 1.2 0" 
-          scale="1.5 1.5 1.5" 
-          color="#FFD700"
-          align="center"
-          font="kelsonsans"
-          shadow
-        ></a-text>
-        
-      </a-marker>
-      
-      <!-- Камера -->
-      <a-entity camera></a-entity>
-      
-    </a-scene>
-    <div class="info">
-      📱 Наведите камеру на QR-код со значением "5"
-    </div>
-  </body>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Земля в AR — QR-маркер</title>
+
+  <!-- A-Frame -->
+  <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+
+  <!-- AR.js -->
+  <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js/aframe/build/aframe-ar.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+    }
+    .info {
+      position: fixed;
+      bottom: 30px;
+      left: 20px;
+      right: 20px;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(10px);
+      color: white;
+      padding: 15px 25px;
+      border-radius: 50px;
+      text-align: center;
+      font-size: 16px;
+      font-weight: 500;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      z-index: 9999;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+  </style>
+</head>
+
+<body>
+
+<a-scene embedded arjs="detectionMode: mono_and_matrix; matrixCodeType: 3x3; debugUIEnabled: false;">
+
+  <!-- Загрузка модели -->
+  <a-assets>
+    <a-asset-item id="earthModel" src="models/Earth.glb"></a-asset-item>
+  </a-assets>
+
+  <!-- Твой barcode-маркер -->
+  <a-marker type="barcode" value="5">
+
+    <!-- Группа с поворотом как у тебя -->
+    <a-entity rotation="-90 20 0">
+
+      <!-- 3D модель вместо сферы -->
+      <a-entity
+        gltf-model="#earthModel"
+        position="0 0.5 0"
+        scale="0.3 0.3 0.3"
+        animation="property: rotation; to: 0 360 0; loop: true; dur: 20000; easing: linear">
+      </a-entity>
+
+    </a-entity>
+
+    <!-- Подпись -->
+    <a-text
+      value="Планета Земля"
+      position="0 1.2 0"
+      scale="1.5 1.5 1.5"
+      color="#FFD700"
+      align="center">
+    </a-text>
+
+  </a-marker>
+
+  <!-- Камера -->
+  <a-entity camera></a-entity>
+
+  <!-- Свет (если модель будет тёмной) -->
+  <a-entity light="type: ambient; intensity: 1"></a-entity>
+  <a-entity light="type: directional; intensity: 1" position="1 1 0"></a-entity>
+
+</a-scene>
+
+<div class="info">
+  📱 Наведите камеру на QR-код со значением "5"
+</div>
+
+</body>
 </html>
