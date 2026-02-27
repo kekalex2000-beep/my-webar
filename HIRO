@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Мой первый WebAR</title>
+    <script src="https://cdn.jsdelivr.net/npm/aframe"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@ar-js-org/ar.js"></script>
+  </head>
+  <body>
+    <a-scene embedded arjs>
+      <a-marker preset="hiro">
+        <a-box position="0 0.5 0" material="color: red;" scale="0.5 0.5 0.5"></a-box>
+        <a-text value="Привет, мир!" position="-0.5 1 0" scale="1.5 1.5 1.5" color="blue"></a-text>
+      </a-marker>
+      <a-entity camera></a-entity>
+    </a-scene>
+    
+    <div style="position: fixed; bottom: 20px; left: 20px; background: white; padding: 10px; border-radius: 5px;">
+      Наведи камеру на маркер HIRO
+    </div>
+  </body>
+</html>
