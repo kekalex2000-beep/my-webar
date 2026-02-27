@@ -3,29 +3,47 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Мое AR Дерево</title>
+    <title>WebAR: Tree Project</title>
     <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
     <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
   </head>
+
   <body style="margin: 0; overflow: hidden;">
-    <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;">
-      
+    <a-scene 
+      embedded 
+      arjs="sourceType: webcam; debugUIEnabled: false;" 
+      renderer="logarithmicDepthBuffer: true;">
+
       <a-assets>
-        <a-asset-item id="treeModel" src="https://raw.githack.com/kekalex2000-beep/my-webar/main/tree.glb"></a-asset-item>
+        <a-asset-item 
+          id="tree" 
+          src="https://raw.githack.com/kekalex2000-beep/my-webar/main/tree.glb">
+        </a-asset-item>
       </a-assets>
 
       <a-marker preset="hiro">
-        <a-entity 
-          gltf-model="#treeModel" 
-          scale="0.2 0.2 0.2" 
-          position="0 0 0"
-          rotation="0 0 0">
-        </a-entity>
         
-        <a-text value="Moyo derevo!" position="-0.5 1.5 0" align="center" color="green"></a-text>
+        <a-entity 
+          gltf-model="#tree" 
+          scale="0.2 0.2 0.2" 
+          position="0 0 0" 
+          rotation="-90 0 0">
+        </a-entity>
+
       </a-marker>
-      
+
+      <a-entity light="type: ambient; intensity: 1.5;"></a-entity>
+      <a-entity light="type: directional; castShadow: true; intensity: 0.6;" position="1 4 3"></a-entity>
+
       <a-entity camera></a-entity>
+
     </a-scene>
+
+    <div style="position: fixed; bottom: 20px; width: 100%; text-align: center; z-index: 1;">
+      <span style="background: rgba(255,255,255,0.8); padding: 10px; border-radius: 20px; font-family: sans-serif;">
+        Наведи камеру на маркер HIRO
+      </span>
+    </div>
+
   </body>
 </html>
