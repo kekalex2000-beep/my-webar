@@ -3,12 +3,9 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Земля в AR — QR-маркер</title>
-
-    <!-- Подключаем библиотеки (убраны лишние пробелы в URL) -->
+    <title>Земля</title>
     <script src="https://cdn.jsdelivr.net/npm/aframe"></script>
     <script src="https://cdn.jsdelivr.net/npm/@ar-js-org/ar.js"></script>
-
     <style>
       body {
         margin: 0;
@@ -33,22 +30,15 @@
         z-index: 9999;
         max-width: 400px;
         margin: 0 auto;
-        pointer-events: none; /* чтобы не мешать нажатиям на камеру */
+        pointer-events: none;
       }
     </style>
   </head>
 
   <body>
-    <!-- AR-сцена с поддержкой матричных кодов -->
     <a-scene embedded arjs="detectionMode: mono_and_matrix; matrixCodeType: 3x3; debugUIEnabled: false;">
-
-      <!-- QR-маркер со значением 5 (barcode) -->
       <a-marker type="barcode" value="5">
-
-        <!-- Группа с Землёй (правильный поворот: экватор горизонтально, Европа спереди) -->
-        <a-entity rotation="-90 20 0">  <!-- -90 по X убирает Антарктиду наверх, 20 по Y поворачивает Европой -->
-
-          <!-- Красивая текстурированная Земля с качественной текстурой -->
+        <a-entity rotation="-90 20 0">
           <a-sphere
             radius="0.5"
             src="https://threejs.org/examples/textures/planets/earth_atmos_2048.jpg"
@@ -58,31 +48,12 @@
             animation="property: rotation; to: 0 360 0; loop: true; dur: 10000; easing: linear"
             material="shader: standard; metalness: 0.1; roughness: 0.5;"
           ></a-sphere>
-
         </a-entity>
-
-        <!-- Подпись (не вращается вместе с Землёй, т.к. находится вне группы с поворотом) 
-             располагаем над сферой с учётом её позиции +0.5 по Y -->
-        <a-text
-          value="Планета Земля"
-          position="0 1.2 0"
-          scale="1.5 1.5 1.5"
-          color="#FFD700"
-          align="center"
-          font="kelsonsans"
-          shadow
-        ></a-text>
-
       </a-marker>
-
-      <!-- Камера (по умолчанию) -->
       <a-entity camera></a-entity>
-
     </a-scene>
-
-    <!-- Инструкция для пользователя -->
     <div class="info">
-      📱 Наведите камеру на QR-код со значением "5"
+      Наведите камеру на QR-код со значением "5"
     </div>
   </body>
 </html>
